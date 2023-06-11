@@ -9,8 +9,6 @@ os.environ['GRADIO_ANALYTICS_ENABLED'] = 'False'
 os.environ['BITSANDBYTES_NOWELCOME'] = '1'
 warnings.filterwarnings('ignore', category=UserWarning, message='TypedStorage is deprecated')
 
-
-# This is a hack to prevent Gradio from phoning home when it gets imported
 def my_get(url, **kwargs):
     logger.info('Gradio HTTP request redirected to localhost :)')
     kwargs.setdefault('allow_redirects', True)
@@ -1016,7 +1014,7 @@ if __name__ == "__main__":
         for item in new_settings:
             shared.settings[item] = new_settings[item]
 
-    # Set default model settings based on settings file
+    
     shared.model_config['.*'] = {
         'wbits': 'None',
         'model_type': 'None',
@@ -1028,9 +1026,9 @@ if __name__ == "__main__":
         'truncation_length': shared.settings['truncation_length'],
     }
 
-    shared.model_config.move_to_end('.*', last=False)  # Move to the beginning
+    shared.model_config.move_to_end('.*', last=False)  
+    
 
-    # Default extensions
     extensions_module.available_extensions = utils.get_available_extensions()
     if shared.is_chat():
         for extension in shared.settings['chat_default_extensions']:
@@ -1072,10 +1070,10 @@ if __name__ == "__main__":
     # If any model has been selected, load it
     if shared.model_name != 'None':
         model_settings = get_model_specific_settings(shared.model_name)
-        shared.settings.update(model_settings)  # hijacking the interface defaults
-        update_model_parameters(model_settings, initial=True)  # hijacking the command-line arguments
+        shared.settings.update(model_settings)  
+        update_model_parameters(model_settings, initial=True) 
+     
 
-        # Load the model
         shared.model, shared.tokenizer = load_model(shared.model_name)
         if shared.args.lora:
             add_lora_to_model(shared.args.lora)
